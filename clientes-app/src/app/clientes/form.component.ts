@@ -11,7 +11,7 @@ import swal from 'sweetalert2';
 export class FormComponent {
   public cliente: clientes = new clientes();
   public titulo: string = 'Crear cliente';
-  public errores: String[];
+  public errores: string[];
 
   constructor(
     private clienteService: ClienteService,
@@ -35,20 +35,23 @@ export class FormComponent {
   }
 
   public crear(): void {
+    console.log("Entrè")
     this.clienteService
       .create(this.cliente)
       .subscribe((responseNuevoCliente) => {
+        console.log("Entrè")
         this.router.navigate(['/clientes']);
         swal.fire({
           title: 'Nuevo cliente',
           text: `cliente ${this.cliente.nombre} creado con éxito`,
           timer: 4000,
-        }),
-        err => {
-          this.errores = err.error.errors as string[];
-          console.error('Código del error desde el backend' + err.status);
-          console.error(err.error.errors);
-        }
+        })
+      },
+      err => {
+        console.log("Entrè")
+        this.errores = err.error.errors as string[];
+        console.error("Código del error desde el backend " + err.status);
+        console.error(err.error.errors);
       });
   }
 
@@ -61,12 +64,12 @@ export class FormComponent {
           title: 'Editar cliente',
           text: `cliente ${this.cliente.nombre} modificado con éxito`,
           timer: 4000,
-        }),
-        err => {
-          this.errores = err.error.errors as string[];
-          console.error('Código del error desde el backend' + err.status);
-          console.error(err.error.errors);
-        }
+        })
+      },
+      err => {
+        this.errores = err.error.errors as string[];
+        console.error('Código del error desde el backend' + err.status);
+        console.error(err.error.errors);
       });
   }
   

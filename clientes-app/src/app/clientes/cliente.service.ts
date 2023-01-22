@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { CLIENTES } from './clientes.json';
+import { formatDate, DatePipe, } from "@angular/common";
 import { clientes } from './clientes';
 import { Observable, of, throwError } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { map, catchError } from 'rxjs/operators';
+import { map, catchError, tap } from 'rxjs/operators';
 import swal from 'sweetalert2';
 import { Router } from "@angular/router";
 
@@ -17,12 +17,32 @@ export class ClienteService {
   private urlEndPoint: string = 'http://localhost:8080/api/clientes';
   private httpHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
 
-  getClientes(): Observable<clientes[]> {
-    //return of(CLIENTES);
-    //return this.http.get<clientes[]>(this.urlEndPoint);
-    return this.http
-      .get(this.urlEndPoint)
-      .pipe(map((response) => response as clientes[]));
+  getClientes(page: number): Observable<any> {
+    return this.http.get(this.urlEndPoint + '/page/' + page).pipe(
+      tap((response: any)  => {
+        console.log('ClienteService: tap 1');
+        (response.content as clientes[]).forEach(cliente =>{
+          console.log(cliente.nombre);
+        });
+      }),
+      map((response: any) => {
+        (response.content  as clientes[]).map(cliente => {          
+          cliente.nombre = cliente.nombre.toUpperCase();
+          //se comentaron las siguientes 3 lineas para ponerlo glogal en el proyecyo, primero en el appModule y luego con un pipe en el template de cliente
+          //cliente.createAt = formatDate(cliente.createAt, 'dd-MM-yyyy', 'en-US') esta es una forma pa la fecha          
+          //let datePipe = new DatePipe('es-CO');
+          //cliente.createAt = datePipe.transform(cliente.createAt, 'EEE dd, MMM yyyy' /*fullDate*/ /*'dd/MM/yyyy'*/) //formatDate(cliente.createAt, 'dd-MM-yyyy', 'en-US')
+          return cliente;
+        });
+        return response;
+      }),
+      tap(response => {
+        console.log('ClienteService: tap 2');
+        (response.content as clientes[]).forEach(cliente =>{
+          console.log(cliente.nombre);
+        });
+      })
+    );
   }
 
   create(cliente: clientes): Observable<clientes[]> {
