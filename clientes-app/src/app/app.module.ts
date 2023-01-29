@@ -4,7 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
-import { DirectivaComponent } from './directiva/directiva.component';
+import { DirectivaComponent } from './directiva/directiva.component'; 
 import { ClientesComponent } from './clientes/clientes.component';
 import { ClienteService } from './clientes/cliente.service';
 import { RouterModule, Routes } from '@angular/router';
@@ -17,6 +17,7 @@ import { PaginatorComponent } from './paginator/paginator.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatMomentDateModule} from '@angular/material-moment-adapter';
 import{MatDatepickerModule} from '@angular/material/datepicker';
+import { DetalleComponent } from './clientes/detalle/detalle.component';
 
 registerLocaleData(localeES, 'es-CO')
 
@@ -27,7 +28,7 @@ const routes: Routes = [
   { path: 'clientes/page/:page', component: ClientesComponent },
   { path: 'clientes/form', component: FormComponent },
   { path: 'clientes/form', component: FormComponent },
-  { path: 'clientes/form/:id', component: FormComponent }
+  { path: 'clientes/form/:id', component: FormComponent}
 ];
 @NgModule({
   declarations: [
@@ -37,7 +38,8 @@ const routes: Routes = [
     DirectivaComponent,
     ClientesComponent,
     FormComponent,
-    PaginatorComponent
+    PaginatorComponent,
+    DetalleComponent
   ],
   imports: [
     BrowserModule,
