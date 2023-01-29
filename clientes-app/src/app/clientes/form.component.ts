@@ -3,6 +3,7 @@ import { ClienteService } from './cliente.service';
 import { clientes } from './clientes';
 import { Router, ActivatedRoute } from '@angular/router';
 import swal from 'sweetalert2';
+import { Region } from './region';
 
 @Component({
   selector: 'app-form',
@@ -12,6 +13,8 @@ export class FormComponent {
   public cliente: clientes = new clientes();
   public titulo: string = 'Crear cliente';
   public errores: string[];
+  regiones : Region[];
+
 
   constructor(
     private clienteService: ClienteService,
@@ -32,6 +35,11 @@ export class FormComponent {
           .subscribe((cliente) => (this.cliente = cliente));
       }
     });
+    this.clienteService.getRegiones().subscribe(
+      regiones => {
+        this.regiones = regiones;
+      }
+    )
   }
 
   public crear(): void {
@@ -71,6 +79,18 @@ export class FormComponent {
         console.error('Código del error desde el backend' + err.status);
         console.error(err.error.errors);
       });
+  }
+
+  compararRegion(objetoDelFor: Region, objetoDeLaclase: Region): boolean{
+
+    if(objetoDelFor === undefined && objetoDeLaclase === undefined){
+      return true;
+    }
+
+    //return (objetoDelFor === null || objetoDeLaclase === null)? false : objetoDelFor === objetoDeLaclase;      
+    return objetoDelFor && objetoDeLaclase ? objetoDelFor.id === objetoDeLaclase.id : objetoDelFor === objetoDeLaclase;
+
+
   }
   
 }
